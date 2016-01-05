@@ -1,0 +1,72 @@
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+li,
+h3,
+span,
+p,
+input,
+button
+{
+    font-family: 'Microsoft YaHei','微软雅黑',arial,simsun;
+
+    margin: 0;
+    padding: 0;
+}
+a
+{
+    text-decoration: none;
+
+    color: #fff;
+}
+ul
+{
+    list-style: none;
+}
+button,
+input
+{
+    font-size: 16px;
+
+    border: none;
+    outline: none;
+}
+
+.container {
+	width: 100%;
+	height:100%;
+	overflow: hidden;
+}
+.layer-group .layer:first-child {
+	position: relative;
+}
+.layer-group .layer{
+	position: absolute;
+	left:0;right:0;
+	text-align: center;
+}
+.draw-layer {
+	background-color: #000;
+}
+.draw-layer canvas {
+	display: block;
+	margin:0 auto;
+	background-color: #fff;
+}
+.score-layer {
+	display: none;
+	top:25%;
+} 
+.menu-layer {
+	display: none;
+	top:50%;
+}
+.menu-layer ul li {
+	margin:10px 0;
+}
+.load-layer {
+	top:40%;
+}
