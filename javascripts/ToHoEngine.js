@@ -103,17 +103,19 @@ window.onload = function () {
 		    var end = 'ontouchend' in document ? 'touchend' : 'mouseup';
 			var startFunc = function (ev) {
 		        ev = ev || window.event;
-		        ev = 'ontouchstart' in document ? ev.touches[0] : ev;
-		        var x = ev.offsetX;
-		        var y = ev.offsetY;
-		        _this.startPos = {'x':x,'y':y};
+		        var pos = 'ontouchstart' in document ? ev.touches[0] : ev;
+		        _this.startPos = {
+		        	'x': pos.pageX,
+		        	'y': pos.pageY
+		        };
 		    };
 		    var moveFunc = function (ev) {
 		        ev = ev || window.event;
-		        ev = 'ontouchstart' in document ? ev.touches[0] : ev;
-		        var x = ev.offsetX;
-		        var y = ev.offsetY;
-		        _this.movePos = {'x':x,'y':y};
+		        var pos = 'ontouchstart' in document ? ev.touches[0] : ev;
+		        _this.movePos = {
+		        	'x': pos.pageX,
+		        	'y': pos.pageY
+		        };
 		        ev.preventDefault();
 		    };
 		    var endFunc = function (ev) {
@@ -357,8 +359,8 @@ window.onload = function () {
 			SYS.Resource.dom.loadlayer = document.getElementById("load-layer");
 
 			var Canvas = document.getElementById("draw-target");
-			Canvas.width = document.body.clientWidth;
-			Canvas.height = document.body.clientHeight;
+			Canvas.width = document.documentElement.clientWidth;
+			Canvas.height = document.documentElement.clientHeight;
 
 			//创建一个四叉树,并将屏幕上的所有物体都插入到这个四叉树中
 			var Tree = new QuadTree(new Rect(0, 0, Canvas.width, Canvas.height));
