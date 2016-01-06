@@ -40,12 +40,10 @@ input
 	height:100%;
 	overflow: hidden;
 }
-.layer-group .layer:first-child {
-	position: relative;
-}
+.layer-group,
 .layer-group .layer{
 	position: absolute;
-	top:0;left:0;right:0;
+	left:0;right:0;
 	text-align: center;
 }
 .draw-layer {
