@@ -114,6 +114,7 @@ window.onload = function () {
 		        var x = ev.offsetX;
 		        var y = ev.offsetY;
 		        _this.movePos = {'x':x,'y':y};
+		        ev.preventDefault();
 		    };
 		    var endFunc = function (ev) {
 
@@ -129,8 +130,8 @@ window.onload = function () {
 			this.Tree = tree;
 		},
 		check: function (collider, collidee) {
-			var distX = Math.abs(collider.x - collidee.x);
-			var distY = Math.abs(collider.y - collidee.y);
+			var distX = Math.abs(collider.cx - collidee.cx);
+			var distY = Math.abs(collider.cy - collidee.cy);
 			if (distX < (collider.width + collidee.width) / 2 && distY < (collider.height + collidee.height) / 2) {
 				// console.log(
 				// 		'x:' + collider.x
@@ -169,13 +170,23 @@ window.onload = function () {
 	};
 	inheritance(Rect, Sprite);
 	Sprite.prototype.draw = function (ctx) {
-		ctx.drawImage(this.img, this.mapX, this.mapY, this.mapWidth, this.mapHeight, this.x - this.halfWidth, this.y - this.halfHeight, this.width, this.height);
+		ctx.drawImage(this.img, this.mapX, this.mapY, this.mapWidth, this.mapHeight, this.x, this.y, this.width, this.height);
 	};
-	Sprite.prototype.move = function (x, y) {
-		this.x = x;
-		this.y = y;
-		this.cx = x + this.halfWidth;
-		this.cy = y + this.halfHeight;
+	Sprite.prototype.move = function (cx, cy) {
+		this.x = cx - this.halfWidth;
+		this.y = cy - this.halfHeight;
+		this.cx = cx;
+		this.cy = cy;
+	};
+	Sprite.prototype.motion = function (distX, distY) {
+		var _this = this;
+		setTimeout(function () {
+			_this.cx += distX;
+			_this.cy += distY;
+			_this.x += distX;
+			_this.y += distY;
+			_this.motion(distX, distY);
+		},50);
 	};
 	Sprite.prototype.change = function (index) {
 		this.mapX = Math.round(index * this.mapWidth);
@@ -187,10 +198,11 @@ window.onload = function () {
 		this.halfHeight = height / 2;
 	};
 	Sprite.prototype.destroy = function () {
-		var exp = new Explosion(this.x, this.y, SYS.Setting.Explosion[0]);
+		var exp = new Explosion(this.cx, this.cy, SYS.Setting.Explosion["default"]);
 		exp.undead = true;
 		Effect(exp, 0, 15, 75);
 		this.removed = true;
+		//console.log("removed");
 	};
 	Sprite.prototype.name = function (name) {		//测试
 		this.aname = name;
@@ -207,70 +219,73 @@ window.onload = function () {
 			Effect(sprite, index, total, timeout);
 		}, timeout);
 	};
-	var Boss = function (x, y, setting) {
+	var Boss = function (cx, cy, setting) {
 		var BossSprite = new Sprite(SYS.Resource.image.obj.all, setting);
 
-		var bltList = [];
+		var dist = 0;
 		var FireTimes = 0;
 		var FireSwitch = true;
 		BossSprite.resize(150,150);
-		BossSprite.move(x, y);
+		BossSprite.move(cx, cy);
 		BossSprite.name("BossSprite");
-		BossSprite.fire = function (idx) {
-			if (!FireSwitch) return;
-			var BulletType = SYS.Setting.Bullet[idx];
-			var speed = BulletType[4];
-			var num = BulletType[5];
-			var limit = BulletType[6];
-			var timeout = BulletType[7];
-			FireTimes++;
-			if (FireTimes > limit) {
+		BossSprite.fire = function (id) {
+			if (!FireSwitch)
+				return;
+			var BulletType = SYS.Setting.Bullet[id];	//type[1]
+			var speed = BulletType[4];	//15
+			var num = BulletType[5];	//9
+			var limit = BulletType[6];	//5
+			var spacing = BulletType[7];
+			var timeout = BulletType[8];//2000 ms
+			dist += speed;
+			if (dist < spacing) {			//当间距达到了限定值才允许射击
+				return;
+			} else {
+				dist = 0;
+			}
+			if (FireTimes > limit) {		//当开火次数到一轮攻击的上限，关闭开火阀门，两秒后打开
+				FireTimes = 0;
 				FireSwitch = false;
 				setTimeout(function () {
-					bltList = [];
 					FireSwitch = true;
 				},timeout);
 				return;
+			} else {
+				FireTimes++;
 			}
-			var x = BossSprite.x
-			,	y = BossSprite.y;
+			var cx = BossSprite.cx
+			,	cy = BossSprite.cy;
 			var blt
 			,	angle;
-			var dist = speed;
 			for (var i = 1; i < num + 1; i++) {
 				angle = Math.PI * 2 * i / num;
-				blt = new Bullet(x, y, BulletType);
-				blt.circle(angle, dist);
-				blt.angle = angle;
-				bltList.push(blt);
+				blt = new Bullet(cx, cy, BulletType);
+				blt.circle(angle, speed / 2);
 				SYS.Collision.Tree.insert(blt);
-			}
-			var len = bltList.length;
-			for (var j = 0; j < len; j++) {
-				bltList[j].circle(bltList[j].angle, dist);
 			}
 		};
 		return BossSprite;
 	};
-	var Explosion = function (x, y, setting) {
+	var Explosion = function (cx, cy, setting) {
 		var ExplosionSprite = new Sprite(SYS.Resource.image.obj.explosion, setting);
-		ExplosionSprite.move(x, y);
+		ExplosionSprite.move(cx, cy);
 		ExplosionSprite.name("ExplosionSprite");
 		return ExplosionSprite;
 	};
-	var Bullet = function (x, y, setting) {
+	var Bullet = function (cx, cy, setting) {
 		var BulletSprite = new Sprite(SYS.Resource.image.obj.all, setting);// 10, 3435, 60, 60);
-		BulletSprite.move(x, y);
+		BulletSprite.move(cx, cy);
 		BulletSprite.name("BulletSprite");
 		BulletSprite.circle = function (angle, dist) {
-			this.x += Math.round(Math.sin(angle) * dist);
-			this.y += Math.round(Math.cos(angle) * dist);
+			var distX = Math.round(Math.sin(angle) * dist);
+			var distY = Math.round(Math.cos(angle) * dist);
+			this.motion(distX, distY);
 		}
 		return BulletSprite;
 	};
-	var Player = function (x, y, setting) {
+	var Player = function (cx, cy, setting) {
 		var PlayerSprite = new Sprite(SYS.Resource.image.obj.player, setting);
-		PlayerSprite.move(x, y);
+		PlayerSprite.move(cx, cy);
 		PlayerSprite.name("PlayerSprite");
 		return PlayerSprite;
 	};
@@ -304,17 +319,17 @@ window.onload = function () {
 	};
 	SYS.Setting = {
 		Bullet: {
-			"0":[10, 3435, 60, 60, 15, 9, 5, 2000],	//[mapX, mapY, mapWidth, mapHeight, speed, number——(PI*2), limit, timeout]
-			"1":[20, 2838, 30, 30, 15, 9, 5, 2000]
+			"default":[10, 3435, 60, 60, 15, 9, 5, 200, 2000],	//[mapX, mapY, mapWidth, mapHeight, speed, number——(PI*2), limit, timeout]
+			"taiji":[20, 2838, 30, 30, 15, 9, 5, 200, 2000]
 		},
 		Explosion: {
-			"0": [0, 0, 62, 63]
+			"default": [0, 0, 62, 63]
 		},
 		Boss: {
-			"0": [0, 750, 250, 250]
+			"default": [0, 750, 250, 250]
 		},
 		Player: {
-			"0": [0, 294, 90, 90]
+			"default": [0, 294, 90, 90]
 		}
 	}
 	SYS.Resource = {
@@ -342,6 +357,8 @@ window.onload = function () {
 			SYS.Resource.dom.loadlayer = document.getElementById("load-layer");
 
 			var Canvas = document.getElementById("draw-target");
+			Canvas.width = document.body.clientWidth;
+			Canvas.height = document.body.clientHeight;
 
 			//创建一个四叉树,并将屏幕上的所有物体都插入到这个四叉树中
 			var Tree = new QuadTree(new Rect(0, 0, Canvas.width, Canvas.height));
@@ -361,17 +378,19 @@ window.onload = function () {
 			var	resultArr = [];
 
 			SYS.Loader.onload = function () {
-				var boss = new Boss(SYS.Render.renderWidth / 2, SYS.Render.renderHeight / 3, SYS.Setting.Boss[0])
-				,	player = new Player(SYS.Render.renderWidth / 2, SYS.Render.renderHeight, SYS.Setting.Player[0]);
+				var boss = new Boss(SYS.Render.renderWidth / 2, SYS.Render.renderHeight / 3, SYS.Setting.Boss["default"])
+				,	player = new Player(SYS.Render.renderWidth / 2, SYS.Render.renderHeight, SYS.Setting.Player["default"]);
 
 				SYS.Collision.Tree.insert(boss);
 
+				FPS.init();
 				var loop = function () {
 				    // 重新向四叉树中插入所有物体，重新初始化四叉树
 				    // ...
 				    // 筛选物体集合并进行碰撞检测
 				    // ...
-					boss.fire(0);
+					if(!boss.removed)
+						boss.fire("default");
 				    player.move(SYS.Control.movePos.x, SYS.Control.movePos.y);
 					resultArr = SYS.Collision.Tree.retrieve(player);
 				    resultArr.forEach(function(result, index) {
@@ -390,21 +409,29 @@ window.onload = function () {
 					SYS.Render.render();
 					SYS.Render.empty();
 
+					FPS.show();
 					requestAnimationFrame(loop);
 				};
 				requestAnimationFrame(loop);
 			};
 		}
 	};
-	//	var startTime = +new Date;
-	//	var endTime = +new Date;
-	//	var frame = 0;
-	//	var fps = document.getElementById("fps");
-	//	endTime = +new Date;
-	//	frame = Math.round(1000 / (endTime - startTime));
-	//	startTime = endTime;
-
-	// fps.innerHTML = frame;
+	var FPS = {
+		layer: null,
+		startTime: null,
+		endTime: null,
+		frame: 0,
+		init: function () {
+			this.startTime = +new Date;
+			this.layer = document.getElementById("fps");
+		},
+		show: function () {
+			this.endTime = +new Date;
+			this.frame = Math.round(1000 / (this.endTime - this.startTime));
+			this.startTime = this.endTime;
+			this.layer.innerHTML = this.frame;
+		}
+	}
 	Game.init();
 	Game.play();
 };

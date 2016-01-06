@@ -7,7 +7,7 @@
 
 
 /*
-	矩形对象
+	矩形对象||碰撞对象
 */
 var Rect = function(x, y, width, height) {
 	this.width = width;
@@ -93,7 +93,7 @@ QuadTree.prototype.getIndex = function(rect) {
 		onLeft = rect.x + rect.width <= bounds.cx,
 		onRight = rect.x >= bounds.cx;
 
-	if (!isInner) return -1;
+	//if (!isInner) return -1;
 
 	if (onTop) {
 		if (onRight) {
@@ -206,17 +206,16 @@ QuadTree.prototype.refresh = function(root) {
 	root = root || this;
 
 	for (i = objs.length - 1; i >= 0; i--) {
-		rect = objs[i];
+		rect = objs[i];						//rect为objs的基类
 
-		if (rect.removed) {					//当sprite标记为已删除
-			this.objects.splice(i, 1);
+		if (rect.removed || !isInner(rect, root.bounds)) {	//当sprite标记为已删除||超出屏幕
+			this.objects.splice(i, 1);				//删除当前物体
 			continue;
 		}
 
 		index = this.getIndex(rect);
-
 		// 如果矩形不属于该象限，则将该矩形重新插入
-		if (!isInner(rect, this.bounds)) {
+		if (index === -1 || !isInner(rect, this.bounds)) {
 			if (this !== root) {
 				root.insert(objs.splice(i, 1)[0]);
 			}
@@ -236,10 +235,10 @@ QuadTree.prototype.refresh = function(root) {
 	return result;
 };
 
-// 判断矩形是否在象限范围内
+// 判断矩形是否在象限范围内——溢出即全部在象限外时返回false
 function isInner(rect, bounds) {
-	return rect.x >= bounds.x 
-	&&	rect.x + rect.width <= bounds.cx 
-	&&	rect.y >= bounds.y 
-	&&	rect.y + rect.height <= bounds.cy;
+	return	rect.x + rect.width >= bounds.x &&
+			rect.y + rect.height >= bounds.y &&
+			rect.x - rect.width <= bounds.x + bounds.width &&
+			rect.y - rect.height <= bounds.y + bounds.height;
 }
