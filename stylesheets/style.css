@@ -47,24 +47,31 @@ input
 	text-align: center;
 }
 .draw-layer {
-	background-color: #000;
+	z-index: 0;
 }
-.draw-layer canvas {
-	display: block;
-	margin:0 auto;
-	background-color: #fff;
+.bg-layer {
+	z-index: -10;
+	border-color: #000;
 }
 .score-layer {
-	display: none;
-	top:25%;
+	text-align: left !important;
 } 
 .menu-layer {
 	display: none;
 	top:50%;
+}
+.reset-layer {
+	display: none;
+	top:50%;
+	background-color: #000;
 }
 .menu-layer ul li {
 	margin:10px 0;
 }
 .load-layer {
 	top:40%;
+}
+.text {
+	color: #ddd;
+	text-shadow: 0 0 1px #000;
 }

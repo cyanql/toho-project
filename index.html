@@ -12,11 +12,14 @@
 </head>
 <body>
 	<div class="layer-group container">
+		<div id="bg-layer" class="layer bg-layer">
+			<canvas id="bg-target" width="360" height="640"></canvas>
+		</div>
 		<div id="draw-layer" class="layer draw-layer">
 			<canvas id="draw-target" width="360" height="640"></canvas>
 		</div>
 		<div id="score-layer" class="layer score-layer">
-			<h2 id="score" class="score">SCORE:0</h2>
+			<span class="score text">SCORE:<span  id="score" class="text">0</span></span>
 		</div>
 		<div id="menu-layer" class="layer menu-layer">
 			<ul>
@@ -24,10 +27,13 @@
 				<li>读取进度</li>
 			</ul>
 		</div>
+		<div id="reset-layer" class="layer reset-layer">
+			<h4 id="reset" class="reset text">重新开始</h4>
+		</div>
 		<div id="load-layer" class="layer load-layer">
 			<div class="loading">读取中...</div>
 		</div>
-		<div class="layer fpc-layer">FPS：<span id="fps">0</span></div>
+		<div class="layer fps-layer">FPS：<span id="fps" class="text">0</span></div>
 	</div>
 <script src="./javascripts/Quadtree.js"></script>
 <script src="./javascripts/ToHoEngine.js"></script>

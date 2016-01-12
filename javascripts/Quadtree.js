@@ -10,14 +10,29 @@
 	矩形对象||碰撞对象
 */
 var Rect = function(x, y, width, height) {
-	this.width = width;
-	this.height = height;
 	this.x = x;
 	this.y = y;
 	this.cx = x + width / 2;
 	this.cy = y + height / 2;
+	this.width = width;
+	this.height = height;
+	this.halfWidth = width / 2;
+	this.halfHeight = height / 2;
 };
-
+Rect.prototype.move = function (cx, cy) {
+	this.x = cx - this.halfWidth;
+	this.y = cy - this.halfHeight;
+	this.cx = cx;
+	this.cy = cy;
+};
+Rect.prototype.motion = function (distX, distY) {
+};
+Rect.prototype.resize = function (per) {
+	this.width *= per;
+	this.height *= per;
+	this.halfWidth *= per;
+	this.halfHeight *= per;
+};
 Rect.prototype.carve = function(bounds) {
 	var result = [],
 		temp = [],
@@ -207,7 +222,6 @@ QuadTree.prototype.refresh = function(root) {
 
 	for (i = objs.length - 1; i >= 0; i--) {
 		rect = objs[i];						//rect为objs的基类
-
 		if (rect.removed || !isInner(rect, root.bounds)) {	//当sprite标记为已删除||超出屏幕
 			this.objects.splice(i, 1);				//删除当前物体
 			continue;
