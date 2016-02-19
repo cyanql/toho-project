@@ -25,8 +25,6 @@ Rect.prototype.move = function (cx, cy) {
 	this.cx = cx;
 	this.cy = cy;
 };
-Rect.prototype.motion = function (distX, distY) {
-};
 Rect.prototype.resize = function (per) {
 	this.width *= per;
 	this.height *= per;

@@ -110,6 +110,7 @@ window.onload = function () {
 		        	'x': pos.pageX,
 		        	'y': pos.pageY
 		        };
+		        _this.movePos = _this.startPos;
 		    };
 		    var moveFunc = function (ev) {
 		        ev = ev || window.event;
@@ -139,8 +140,8 @@ window.onload = function () {
 		event: {
 			tap : function (callback, _this, ev) {
 				//if (_this.movePose)
-		        	if (Math.abs(_this.movePos.x - _this.startPos.x) > 1 ||  Math.abs(_this.movePos.y - _this.startPos.y) > 1)
-		        		return _this.movePos = null;
+		        if (Math.abs(_this.movePos.x - _this.startPos.x) > 1 ||  Math.abs(_this.movePos.y - _this.startPos.y) > 1)
+		        		return ;
 				callback(ev);
 			},
 			swipe : function (callback, _this, ev) {
@@ -195,14 +196,17 @@ window.onload = function () {
 		this.mapWidth *= per;
 		this.mapHeight *= per;
 	};
+	Sprite.prototype.name = function (name) {		//测试
+		this.name = name;
+	};
+	Sprite.prototype.go = function () {
+
+	};
 	Sprite.prototype.destroy = function () {
 		var exp = Explosion(this.cx, this.cy, SYS.Setting.Explosion["0"]);
 		exp.undead = true;
 		Effect(exp, 0, 15, 75);
 		this.removed = true;
-	};
-	Sprite.prototype.name = function (name) {		//测试
-		this.name = name;
 	};
 	var Effect = function (sprite, index, total, timeout) {
 		var timer;
@@ -225,25 +229,31 @@ window.onload = function () {
 		ExplosionSprite.name("ExplosionSprite");
 		return ExplosionSprite;
 	};
-	var Bullet = function (cx, cy, setList) {
+	var Bullet = function (cx, cy, setList) {  
 		var BulletSprite = new Sprite(SYS.Resource.image.obj.all, setList);// 10, 3435, 60, 60);
 		BulletSprite.move(cx, cy);
 		BulletSprite.name("BulletSprite");
+
+		BulletSprite.angle = 0;
+		BulletSprite.dist = 0;
+		BulletSprite.emittertype = null;
+
+		BulletSprite.set = function (angle, dist, emittertype) {
+			BulletSprite.angle = angle;
+			BulletSprite.dist = dist;
+			BulletSprite.emittertype = emittertype;
+		};
+
+		BulletSprite.go = function () {
+			this.emitter[this.emittertype](this.angle, this.dist);
+		};
+
 		BulletSprite.emitter = {
-			motion: function (distX, distY, callback) {
-				var timer;
-				var motion = function () {
-					if (BulletSprite.removed) {
-						clearTimeout(timer);
-						return;
-					}
-					BulletSprite.cx += distX;
-					BulletSprite.cy += distY;
-					BulletSprite.x += distX;
-					BulletSprite.y += distY;
-					timer = setTimeout(motion, 16);
-				};
-				motion();
+			motion: function (distX, distY) {
+				BulletSprite.cx += distX;
+				BulletSprite.cy += distY;
+				BulletSprite.x += distX;
+				BulletSprite.y += distY;
 			},
 			circle: function (angle, dist) {
 				var distX = Math.round(Math.sin(angle) * dist);
@@ -260,7 +270,7 @@ window.onload = function () {
 	};
 	function rand (min, max) {
 		return Math.floor(Math.random() * (max - min) + min);
-	}
+	};
 	var Boss = function (cx, cy, setList) {
 		var BossSprite = new Sprite(SYS.Resource.image.obj.all, setList);
 
@@ -315,7 +325,10 @@ window.onload = function () {
 				angle = Math.PI * 2 * i / num;
 				blt = Bullet(cx, cy, BulletType);
 				blt.owner = "boss";
-				blt.emitter[emittertype](angle, speed);
+
+				blt.set(angle, speed, emittertype);
+				//blt.emitter["shoot"](angle, speed);
+
 				SYS.Collision.Tree.insert(blt);
 			}
 		};
@@ -355,7 +368,10 @@ window.onload = function () {
 			var blt;
 			blt = Bullet(cx, cy, BulletType);
 			blt.owner = "player";
-			blt.emitter[emittertype](0, - speed);
+
+			blt.set(1, -speed, emittertype);
+			//blt.emitter[emittertype](1, - speed);
+
 			SYS.Collision.Tree.insert(blt);
 		}
 		PlayerSprite.hit = function () {
@@ -390,6 +406,7 @@ window.onload = function () {
 		render: function () {
 			var _this = this;
 			this.Queue.forEach(function (item) {
+				item.go();
 				item.draw(_this.ctx);
 			});
 		}
@@ -398,11 +415,12 @@ window.onload = function () {
 		Bullet: [
 	//[orignX, orignY, orignWidth, orignHeight, speed, number——(PI*2), limit, spacing, timeout]
 			[36, 64, 6, 14, 20, 15, 5, 100, 500, "motion"],
-			[32, 32, 16, 16, 8, 15, 5, 150, 1000, "circle"],
-			[128, 208, 32, 32,  8, 9, 5, 300, 1000, "test"],
-			[192, 256, 32, 32, 8, 9, 5, 300, 1000, "test"],
-			[64, 448, 64, 64, 8, 6, 5, 300, 1000, "test"],
-			[32, 32, 16, 16, 8, 15, 5, 150, 1000, "test"]
+			[32, 32, 16, 16, 8, 15, 5, 150, 1500, "circle"],
+			[128, 208, 32, 32,  8, 9, 5, 300, 1500, "test"],
+			[192, 256, 32, 32, 8, 9, 5, 300, 1500, "test"],
+			[64, 448, 64, 64, 8, 6, 5, 300, 1500, "test"],
+			[32, 32, 16, 16, 8, 15, 5, 150, 1500, "test"],
+			[32, 32, 16, 16, 8, 15, 5, 150, 1500, "test"]
 		],
 		Explosion: [
 			[0, 0, 62, 63]
@@ -534,8 +552,7 @@ window.onload = function () {
 			SYS.Control.on("tap", function (ev) {
 				ev = ev || window.event;
 				var elem = ev.srcElement || ev.target;
-				console.log(elem);
-				if　(elem.id == "reset")
+				if (elem.id == "reset")
 					_this.reset();
 			});
 		},
