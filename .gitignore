@@ -1,2 +1,5 @@
 #folder
 noused
+
+#document
+*.bat
