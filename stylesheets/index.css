@@ -233,51 +233,28 @@ img{border:none;}
 }
 
 /*****************carousel******************/
-#carousel-warp {
-	position: relative;
-	overflow: hidden;
-}
-#carousel-warp-main {
-	position: relative;
-	left: 0;
-	top: 0;
-	width: 19200px;
-	transition: left .5s ease;
-	overflow: hidden;
-	backface-visibility: hidden;
-}
-#carousel-warp-main > * {
-	float:left;
-	display: block;
-}
-#carousel-warp-main img {
-	display: block;
-}
-
-#carousel-fade {
+#carousel,
+.carousel {
     position: relative;
-    min-width: 1200px;
 }
-#carousel-fade-main {
+#carousel-main,
+.carousel-main {
     position: relative;
     height: 600px;
+    overflow: hidden;
     background-color: #333;
 }
-#carousel-fade-main > * {
+#carousel-main > *,
+.carousel-main > * {
     position: absolute;
     left:0;
     top:0;
     width:100%;
-    opacity: 0;
-    transition:1.5s linear;
-}
-#carousel-fade-main a {
+    transition-duration:1s;
+    backface-visibility: hidden;
     display: block;
 }
-#carousel-fade-main > .fade-first {
-    display: block;
-    opacity: 1;
-}
+
 
 
 /**************Tab********************/

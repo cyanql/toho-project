@@ -6,17 +6,37 @@ function addCarousel(custom) {
 	return temp;
 }
 function Carousel(custom) {
-	if (!custom) return console.log('请填写目标元素id和按钮容器id');
+	if (!custom) return alert('请填写目标元素id和按钮容器id');
 
 	this.extend({
 		carouselID : 'carousel',		//组件id
 		mainID : 'carousel-main',		//组件-图片容器id
-		type : 'warp',
-		timeout : 3000
+		type : 'wrap',
+		timeout : 3000,
+		direction: 'left',
+		btnColor: '#cf1132',
+		markerActiveColor: '#cf1132',
+		markerNormalColor: '#333'
 	}, custom);
 }
+var cn = 'main';
+
+'main'.match(new RegExp('^ ?' + cn + ' ?$'));
 
 Carousel.prototype = {
+	hasClass: function(elem, className) {
+		return elem.className.match(new RegExp('\\b' + className + '\\b'));;
+	},
+	addClass: function(elem, className) {
+		if (!this.hasClass(elem, className)) {
+			elem.className = elem.className.split(' ').concat(className).join(' ');
+		}
+	},
+	removeClass: function(elem, className) {
+		if (this.hasClass(elem, className)) {
+			elem.className = elem.className.replace(new RegExp('\\b' + className + '\\b'), '');
+		}
+	},
 	extend: function (options, custom){
 		for (var item in options) {
 			if (custom.hasOwnProperty(item))
@@ -31,62 +51,49 @@ Carousel.prototype = {
 		this.main = document.getElementById(this.mainID);
 		this.main.img = this.main.getElementsByTagName('img');
 
-		this.items = this.main.children;
+		//获取第一张图的高度并初始化carousel的高度，回调防止图片未加载
+		var mainStyle = this.main.style;
+		var firstImg = this.main.img[0];
+		mainStyle.height = firstImg.height + 'px';
+		mainStyle.width = firstImg.width + 'px';
+		firstImg.onload = function() {
+			mainStyle.height = this.height + 'px';
+			mainStyle.width = this.width + 'px';
+		}
+		this.mainStyle = mainStyle;
 
-		this.itemNumber = this.items.length;
+		this.items = Array.prototype.map.call(this.main.children, function(v) {
+			return v;
+		});
+
+		this.total = this.items.length;
 
 		this.prevIndex = 0;
-		this.itemIndex = 0;
+		this.currIndex = 0;
 
-		if (this.type == 'fade') {
+		this.interval = null;
 
-			this.itemTemp = this.items[this.itemIndex];
+		this.addClass(this.carousel, 'carousel');
+		this.addClass(this.main, 'carousel-main');
 
-		} else if (this.type = 'warp') {
-			//克隆最后一个插入队首，克隆第一个插入队尾
-			var first, last;
-			first = this.items[this.itemNumber - 1].cloneNode(true);
-			this.main.insertBefore(first,this.items[0]);
-			last = this.items[1].cloneNode(true);
-			this.main.appendChild(last);
-
-			//当第一个图片加载好,获取其宽度，并将图片容器的宽度设置为所有图片宽度和，组件宽度设置为图片宽度
-			this.main.img[0].onload = function () {
-				_this.itemWidth = this.width;
-				_this.carousel.style.width = this.width + 'px';
-				_this.main.style.width = this.width * _this.itemNumber + 'px';
-				_this.main.style.left = -this.width + 'px';
-			}
-
-			this.mainStyle = this.main.style;
-
-			// //设置组件css
-			// var carouselStyle = this.carousel.style;
-			// carouselStyle.position = 'relative';
-			// carouselStyle.overflow = 'hidden';
-
-			// //设置图片容器css
-			// var mainStyle = this.main.style;
-			// mainStyle.position = 'relative';
-			// mainStyle.left = '0';
-			// mainStyle.top = '0';
-			// mainStyle.width = this.itemNumber * 1920 + 'px';
-			// mainStyle.transition = 'left .5s ease';
-			// mainStyle.overflow = 'hidden';
-			// mainStyle.backfaceVisibility = 'hidden';
-			// this.mainStyle = mainStyle;
-
-			// //获取图片容器内元素
-			// var items = this.items;
-			// for (var i = 0, len = items.length; i < len; i++) {		//设置元素css
-			// 	items[i].style.float = 'left';
-			// 	items[i].style.display = 'block';
-			// }
-			// for (var j = 0, len = this.main.img.length; j < len; j++)	//设置图片css
-			// 	this.main.img[j].display = 'block';
+		switch (this.type) {
+			case 'fade':
+				Array.prototype.forEach.call(this.main.children, function(v) {
+					v.style.opacity = '0';
+				});
+				this.main.children[0].style.opacity = '1';
+				break;
+			case 'wrap':
+				this.items[this.currIndex].style.transform = 'translate3d(0, 0 ,0)';
+				this.items[this.currIndex + 1].style.transitionDuration = '0s';
+				this.items[this.currIndex + 2].style.transitionDuration = '0s';
+				this.items[this.currIndex + 1].style.transform = 'translate3d(' + this.main.offsetWidth + 'px, 0 ,0)';
+				this.items[this.currIndex + 2].style.transform = 'translate3d(' + (-this.main.offsetWidth) + 'px, 0 ,0)';
+				break;
 		}
-	},
 
+
+	},
 	create: function () {
 		var _this = this;
 
@@ -98,9 +105,9 @@ Carousel.prototype = {
 			a.style.top = '50%';
 			a.style.padding = '20px 10px';
 			a.style.color = 'white';
-			a.style.backgroundColor = '#cf1132';
+			a.style.backgroundColor = _this.btnColor;
 			a.style.display = 'block';
-			a.style.zIndex = '2';
+			a.style.zIndex = '10';
 			return a;
 		}
 
@@ -114,9 +121,13 @@ Carousel.prototype = {
 		prev.innerHTML = '<';
 		next.innerHTML = '>';
 		prev.onclick = function () {
+			clearInterval(_this.interval);
+			_this.start();
 			_this.prev();
 		};
 		next.onclick = function () {
+			clearInterval(_this.interval);
+			_this.start();
 			_this.next();
 		};
 		
@@ -133,7 +144,7 @@ Carousel.prototype = {
 			a.style.height = '20px';
 			a.style.color = '#fff';
 			a.style.borderRadius = '50%';
-			a.style.backgroundColor = '#333';
+			a.style.backgroundColor = _this.markerNormalColor;
 			a.style.display = 'inline-block';
 			return a;
 		}
@@ -147,15 +158,18 @@ Carousel.prototype = {
 		nav.style.bottom = '2%';
 		nav.style.width = '100%';
 		nav.style.textAlign = 'center';
-		nav.style.zIndex = '2';
+		nav.style.zIndex = '10';
 
 		//设置各自的按钮编号，用以跳转该图片
-		for (i = 0, len = this.itemNumber; i < len; i++) {
+		for (i = 0, len = this.total; i < len; ++i) {
 			marker = createMarker();
-			marker['data-index'] = i;
-			marker.onclick = function () {
-				_this.skip(this['data-index']);
-			};
+			marker.onclick = function (idx) {
+				return function() {
+					clearInterval(_this.interval);
+					_this.start();
+					_this.skip(idx);
+				};
+			}(i);
 			nav.appendChild(marker);
 		}
 
@@ -166,63 +180,86 @@ Carousel.prototype = {
 	},
 	start: function () {
 		var _this = this;
-
-		//根据轮播类型，循环调用相应函数
-		switch (this.type) {
-			case 'warp':
-				setInterval(function () {
-					_this.next();
-				}, this.timeout);
-				break;
-			case 'fade':
-				setInterval(function () {
-					_this.next();
-				}, this.timeout);
-				break;
-		}
+		this.interval = setInterval(function () {
+			_this.next();
+		}, this.timeout);
 	},
 	mark: function () {
-		this.markerNumber[this.prevIndex].style.backgroundColor = '#333';
-		this.markerNumber[this.itemIndex].style.backgroundColor = '#cf1132';
-		this.prevIndex = this.itemIndex;
+		this.markerNumber[this.prevIndex].style.backgroundColor = this.markerNormalColor;
+		this.markerNumber[this.currIndex].style.backgroundColor = this.markerActiveColor;
 	},
 	skip: function (index) {	//跳转函数
-		this.itemIndex = index;
+		this.currIndex = index;
 		this.loop();
 	},
 	prev: function () {			//上一个
-		this.itemIndex --;
+		this.currIndex --;
 		this.loop();
 	},
 	next: function() {			//下一个
-		this.itemIndex ++;
+		this.currIndex ++;
 		this.loop();
 	},
 	loop: function () {		//判断是否到达队尾或队首，根据情况直接跳转（去掉动画过程做到无缝连接）
 		switch (this.type) {
-			case 'warp':
-				this.mainStyle.transition = 'left .5s ease';
-				if (this.itemIndex > this.itemNumber - 1) {
-					this.itemIndex = 0;
-					this.mainStyle.transition = '0s';
-				} else if (this.itemIndex < 0) {
-					this.itemIndex = this.itemNumber - 1;
-					this.mainStyle.transition = '0s';
+			case 'wrap':
+				var nextIndex;
+				if (this.currIndex > this.prevIndex) {
+					this.currIndex %= this.total;
+					nextIndex = (this.currIndex + 1) % this.total;
+				} else {
+					this.currIndex = this.currIndex < 0 ? this.total - 1: this.currIndex;
+					nextIndex = this.currIndex - 1 < 0 ? this.total - 1 : this.currIndex - 1;
 				}
-				this.mainStyle.left = -this.itemWidth * this.itemIndex + 'px';
+
+
+				this.items[this.prevIndex].style.transform = 'translate3d(-100%, 0 ,0)';
+				this.items[this.prevIndex].style.transitionDuration = '1s';
+				this.items[this.currIndex].style.transform = 'translate3d(0, 0 ,0)';
+				this.items[this.currIndex].style.transitionDuration = '1s';
+				this.items[nextIndex].style.transform = 'translate3d(100%, 0 ,0)';
+				this.items[nextIndex].style.transitionDuration = '0s';
+
+				/*
+				var prevItem;
+
+				if (this.currIndex > this.prevIndex) {
+					prevItem = this.items.shift();
+
+					prevItem.style.transform = 'translate3d(-100%, 0 ,0)';
+					prevItem.style.transitionDuration = '1s';
+					this.items[0].style.transform = 'translate3d(0, 0 ,0)';
+					this.items[0].style.transitionDuration = '1s';
+					this.items[1].style.transform = 'translate3d(100%, 0 ,0)';
+					this.items[1].style.transitionDuration = '0s';
+
+					this.items.push(prevItem);
+				} else {
+					prevItem = this.items.pop();
+
+					prevItem.style.transform = 'translate3d(0, 0 ,0)';
+					prevItem.style.transitionDuration = '1s';
+					this.items[0].style.transform = 'translate3d(100%, 0 ,0)';
+					this.items[0].style.transitionDuration = '1s';
+					this.items[1].style.transform = 'translate3d(-100%, 0 ,0)';
+					this.items[1].style.transitionDuration = '0s';
+
+					this.items.unshift(prevItem);
+				}
+				*/
+				this.currIndex %= this.total;
+				this.mark();
+				this.prevIndex = this.currIndex;
 				break;
 
 			case 'fade':
-				if (this.itemIndex < 0)
-					this.itemIndex = this.itemNumber - 1;
-				else if (this.itemIndex > this.itemNumber - 1)
-					this.itemIndex = 0;
+				this.currIndex = this.currIndex < 0 ? this.total - 1: this.currIndex % this.total;
 
-				this.itemTemp.style.opacity = '0';
-				this.itemTemp.style.zIndex = '0';
-				this.items[this.itemIndex].style.opacity = '1';
-				this.items[this.itemIndex].style.zIndex = '2';
-				this.itemTemp = this.items[this.itemIndex];
+				this.items[this.prevIndex].style.opacity = '0';
+				this.items[this.currIndex].style.opacity = '1';
+
+				this.mark();
+				this.prevIndex = this.currIndex;
 				break;
 		}
 		this.mark();
