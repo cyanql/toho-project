@@ -1,10 +1,10 @@
 import Rect from './Rect';
-import Explosion from './ExplosionSprite';
 import Anime from '../lib/anime';
+import setting from '../setting';
 
 export default
 class Sprite extends Rect {
-	constructor(img, config, explosion) { //初始化映射目标，映射坐标，映射宽高	orignX, orignY, width, height
+	constructor(img, config) { //初始化映射目标，映射坐标，映射宽高	orignX, orignY, width, height
 		super(0, 0, config.orignWidth, config.orignHeight);
 
 		Object.assign(this, {
@@ -18,8 +18,7 @@ class Sprite extends Rect {
 			mapWidth: config.orignWidth,
 			mapHeight: config.orignHeight,
 			removed: false,
-			undead: false,
-			explosion
+			undead: false
 		});
 	}
 
@@ -39,10 +38,11 @@ class Sprite extends Rect {
 	go() {
 
 	}
-	destroy() {
-		let exp = new Explosion(this.img, this.cx, this.cy, this.explosion);
+	destroy(img, tree) {
+		let exp = new Sprite(img, setting.Explosion[0]);
+		exp.move(this.cx, this.cy);
 		exp.undead = true;
-		Anime(exp, 0, 15, 75);
+		Anime(exp, 0, 15, 75, tree);
 		this.removed = true;
 	}
 }

@@ -1,6 +1,7 @@
 /*eslint-disable */
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
@@ -22,7 +23,8 @@ var config = {
         contentBase: './'
     },
     entry: {
-        game: ['./src/app/index']
+        index: ['./src/app/index'],
+        game: ['./src/app/game']
     },
     output: {
         path: BUILD_PATH, //输出目录的配置，模板、样式、脚本、图片等资源的路径配置都相对于它
@@ -32,7 +34,7 @@ var config = {
     },
     resolve: {
         alias: {},
-        extensions: ['', '.js', '.css', '.scss', '.jsx', '.png', '.jpg', '.less']
+        extensions: ['', '.js', '.css', '.png', '.jpg', '.json']
     },
     module: {
         loaders: [{
@@ -41,17 +43,27 @@ var config = {
             loader: 'babel' // 'babel-loader' is also a legal name to reference
         }, {
             test: /\.css$/,
-            loader: 'style!css'
+            include: SRC_PATH,
+            loader: ExtractTextPlugin.extract('style', 'css')
+        }, {
+            //html模板加载器，可以处理引用的静态资源，默认配置参数attrs=img:src，处理图片的src引用的资源
+            //比如你配置，attrs=img:src img:data-src就可以一并处理data-src引用的资源了，就像下面这样
+            test: /\.html$/,
+            include: SRC_PATH,
+            loader: "html?attrs=img:src img:data-src"
         }, {
             test: /\.(jpg|png)$/,
-            loader: 'url?name=images/[name].[ext]&limit=51200'
+            include: SRC_PATH,
+            loader: 'url?name=images/[name].[ext]&limit=10'
+        }, {
+            test: /\.json$/,
+            include: APP_SRC_PATH,
+            loader: 'json'
         }]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'lib', //entry入口名字,
-            filename: 'js/lib.js' //输出名字
-            // minChunks: 3
+        new ExtractTextPlugin('css/[name].css', {
+            allChunks: false
         })
     ]
 };
@@ -61,9 +73,9 @@ for (var name in config.entry) {
         config.plugins.push(new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
             // favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
             title: name,
-            chunks: ['lib', name], //需要引入的chunk，不配置就会引入所有页面的资源
+            chunks: [name], //需要引入的chunk，不配置就会引入所有页面的资源
             filename: './app/' + name + '.html', //生成的html存放路径，相对于path
-            template: './src/template/game.html', //html模板路径
+            template: './src/template/' + name + '.html', //html模板路径
             inject: 'body', //js插入的位置，true/'head'/'body'/false
             hash: true, //为静态资源生成hash值
             minify: { //压缩HTML文件    

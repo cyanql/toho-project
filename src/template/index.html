@@ -7,8 +7,6 @@
 	<meta name="author" content="Keyves">
 	<meta name="keywords" content="ToHoProject,东方,射击,游戏,弹幕射击,弹幕游戏,STG游戏">
 	<meta name="description" content="一款基于东方的网页弹幕射击游戏">
-	<link rel="stylesheet" href="./stylesheets/index.css">
-
 <!--[if lt IE7]>
 	<div style="position:absolute;left:0;top:0;width:100%;height:100px;line-height:100px;text-align:center;">浏览器版本过低，建议升级或更换chrome</div>
 <![end if]-->
@@ -60,9 +58,9 @@
 		</div>
 		<div id="carousel-fade" class="container-banner">
 			<ul id="carousel-fade-main">
-				<li class="fade-first"><a href="#"><img src="./images/40401279_big_p1.png" alt=""></a></li>
-				<li><a href="#"><img src="./images/40401279_big_p2.png" alt=""></a></li>
-				<li><a href="#"><img src="./images/40401279_big_p3.png" alt=""></a></li>
+				<li class="fade-first"><a href="#"><img src="../images/40401279_big_p1.png" alt=""></a></li>
+				<li><a href="#"><img src="../images/40401279_big_p2.png" alt=""></a></li>
+				<li><a href="#"><img src="../images/40401279_big_p3.png" alt=""></a></li>
 			</ul>
 		</div>
 		<div class="container-game clear-fix">
@@ -71,11 +69,11 @@
 			</div>
 			<div id="carousel-wrap" class="game-link">
 				<ul id="carousel-wrap-main">
-					<li><a href="#"><img src="./images/40401279_big_p3.png" alt=""></a></li>
-					<li><a href="#"><img src="./images/40401279_big_p2.png" alt=""></a></li>
-					<li><a href="#"><img src="./images/40401279_big_p1.png" alt=""></a></li>
-					<li><a href="#"><img src="./images/40401279_big_p4.png" alt=""></a></li>
-					<li><a href="#"><img src="./images/40401279_big_p5.png" alt=""></a></li>
+					<li><a href="#"><img src="../images/40401279_big_p3.png" alt=""></a></li>
+					<li><a href="#"><img src="../images/40401279_big_p2.png" alt=""></a></li>
+					<li><a href="#"><img src="../images/40401279_big_p1.png" alt=""></a></li>
+					<li><a href="#"><img src="../images/40401279_big_p4.png" alt=""></a></li>
+					<li><a href="#"><img src="../images/40401279_big_p5.png" alt=""></a></li>
 				</ul>
 			</div>
 			<div class="game-news tab">
@@ -147,36 +145,5 @@
 			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="./javascripts/Carousel.js"></script>
-<script>
-	var Tab = function () {
-		var ctrl = document.getElementById('tab-ctrl');
-		var sliderContainer = document.getElementById('tab-slider-container');
-
-		var ctrlItems = ctrl.children;
-		var sliderItemWidth = sliderContainer.children[0].clientWidth;
-
-		for (var i = 0, len = ctrlItems.length; i < len; i++) {
-			ctrlItems[i]['data-index'] = i;
-			ctrlItems[i].onmouseover = function () {
-				ctrl.querySelector('.tab-selected').className = '';
-				this.className += 'tab-selected';
-				sliderContainer.style.marginLeft = -sliderItemWidth * this['data-index'] + 'px';
-			};
-		}
-	}();
-
-	addCarousel({
-		carouselID: 'carousel-wrap',
-		mainID: 'carousel-wrap-main',
-		type: 'wrap'
-	});
-	addCarousel({
-		carouselID: 'carousel-fade',
-		mainID: 'carousel-fade-main',
-		type: 'fade',
-		timeout: 5000
-	});
-</script>
 </body>
 </html>

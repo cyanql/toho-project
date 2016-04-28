@@ -1,22 +1,23 @@
+import Bullet from './BulletSprite';
+
 export default
 class Emitter {
-	constructor(cx, cy) {
+	constructor(img, cx, cy) {
+		this.img = img;
 		this.cx = cx;
 		this.cy = cy;
 	}
-	circle(EmitterConfig, tree) {
-		let cx, cy, number, speed, propulsiontype, angle, blt;
+	circle(emitterConfig, tree) {
+		let number, speed, propulsiontype, angle, blt;
 
-		cx = this.cx;
-		cy = this.cy;
-		number = EmitterConfig.number;	//9
-		speed = EmitterConfig.speed;	//15
-		propulsiontype = EmitterConfig.propulsiontype;
-
-		for (let i = 1; i < number + 1; i++) {
+		number = emitterConfig.number;	//9
+		speed = emitterConfig.speed;	//15
+		propulsiontype = emitterConfig.propulsiontype;
+		
+		for (let i = 1; i < number + 1; ++i) {
 			angle = Math.PI * 2 * i / number;
 
-			blt = new Emitter(cx, cy, EmitterConfig);
+			blt = new Bullet(this.img, this.cx, this.cy, emitterConfig);
 			blt.owner = 'boss';
 			blt.set(angle, speed, propulsiontype);
 			tree.insert(blt);

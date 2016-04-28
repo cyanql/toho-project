@@ -1,11 +1,11 @@
 import Sprite from './Sprite';
-import Emitter from './Emitter';
+import Bullet from './BulletSprite';
 import setting from '../setting';
 
 export default
 class Player extends Sprite {
-	constructor(img, cx, cy, config, explosion) {
-		super(img, config, explosion);
+	constructor(img, cx, cy, config) {
+		super(img, config);
 
 		super.move(cx, cy);
 		super.resize(0.8);
@@ -14,10 +14,12 @@ class Player extends Sprite {
 		const EmitterConfig = setting.Emitter[0]; //type[1]
 		this.HP = config.HP;
 		this.emitter = {
+			img: img,
 			speed: EmitterConfig.speed,
 			num: EmitterConfig.number,
 			limit: EmitterConfig.limit,
 			timeout: EmitterConfig.timeout,
+			propulsiontype: EmitterConfig.propulsiontype,
 			type: EmitterConfig.type,
 			spacing: 100,
 			dist: 0
@@ -25,16 +27,16 @@ class Player extends Sprite {
 	}
 	fire(tree) {
 		this.emitter.dist += this.emitter.speed;
-		if (this.emitter.dist < this.spacing) { //当间距达到了限定值才允许射击
+		if (this.emitter.dist < this.emitter.spacing) { //当间距达到了限定值才允许射击
 			return;
 		} else {
 			this.emitter.dist = 0;
 		}
 
-		let blt = new Emitter(this.cx, this.cy, setting.Emitter[0]);
+		let blt = new Bullet(this.img, this.cx, this.cy, setting.Emitter[0]);
 		blt.owner = 'player';
 
-		blt.set(1, -this.emitter.speed, this.emitter.type);
+		blt.set(1, -this.emitter.speed, this.emitter.propulsiontype);
 
 		tree.insert(blt);
 	}

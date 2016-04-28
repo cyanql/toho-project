@@ -42,7 +42,7 @@ img{border:none;}
 .container {
 	margin-top: 50px;
 	min-width: 1200px;
-	background:#cf1132 url(./images/web_bg_back.png) no-repeat 0 0;
+	background:#cf1132 no-repeat 0 0;
 	background-size: cover;
 }
 .container-nav {

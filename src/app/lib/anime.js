@@ -1,7 +1,6 @@
-
-let Anime = function(sprite, index, total, timeout, tree) {
+export default function Anime(sprite, index, total, timeout, tree) {
 	let timer;
-	let motion = function() {
+	(function motion() {
 		if (index >= total) {
 			sprite.removed = true;
 			sprite.undead = false;
@@ -11,6 +10,5 @@ let Anime = function(sprite, index, total, timeout, tree) {
 		sprite.change(++index);
 		tree.insert(sprite);
 		timer = setTimeout(motion, timeout);
-	};
-	motion();
-};
+	})();
+}

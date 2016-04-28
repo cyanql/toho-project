@@ -6,56 +6,58 @@ function rand(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
 }
 
+export default
 class Boss extends Sprite {
-	constructor(img, cx, cy, config, explosion) {
-		super(img, config, explosion);
+	constructor(img, cx, cy, config) {
+		super(img, config);
 
-		const EmitterConfig = setting.Emitter[2];
+		const emitterConfig = setting.Emitter[2];
+
+		this.emitterConfig = emitterConfig;
 		
 		super.remap(2.5);
 		super.resize(2);
 		super.move(cx, cy);
-		super.name('BossSprite');
 
-		this.HP = config[4];
-		this.dist = 0;
+		this.HP = config.HP;
+		this.emitter = {
+			main: new Emitter(img, cx, cy),
+			speed: emitterConfig.speed,
+			num: emitterConfig.number,
+			limit: emitterConfig.limit,
+			spacing: emitterConfig.spacing,
+			timeout: emitterConfig.timeout,
+			type: emitterConfig.type,
+			dist: 0
+		};
 		this.fireTimes = 0;
 		this.fireSwitch = true;
-		this.emitter = {
-			main: new Emitter(super.cx, super.cy),
-			speed: EmitterConfig.speed,
-			num: EmitterConfig.number,
-			limit: EmitterConfig.limit,
-			spacing: EmitterConfig.spacing,
-			timeout: EmitterConfig.timeout,
-			type: EmitterConfig.type
-		};
 	}
-	setEmitter(Emitter) {
-		this.emitter.main = Emitter;
+	setEmitter(emitterConfig) {
+		Object.assign(this.emitter, emitterConfig);
 	}
 	fire(tree) {
 		if (!this.fireSwitch)
 			return;
-		this.emitter.dist += this.emitter.speed;
 
 		if (this.emitter.dist < this.emitter.spacing) {			//当间距达到了限定值才允许射击
-			return;
+			return this.emitter.dist += this.emitter.speed;
 		} else {
 			this.emitter.dist = 0;
 		}
 
-		const EmitterConfig = setting.Emitter[rand(1, setting.Emitter.length)];	//type[0]
 		if (this.fireTimes > this.emitter.limit) {		//当开火次数到一轮攻击的上限，关闭开火阀门，两秒后打开
-			this.setEmitter(EmitterConfig);
-			setTimeout(function () {
+			this.emitterConfig = setting.Emitter[rand(1, setting.Emitter.length)];	//type[0]
+			this.setEmitter(this.emitterConfig);
+			this.fireTimes = 0;
+			this.fireSwitch = false;
+			return setTimeout(() => {
 				this.fireSwitch = true;
-			},this.timeout);
-			return;
+			},this.emitter.timeout);
 		} else {
 			this.fireTimes++;
 		}
-		this.emitter[this.type](EmitterConfig, tree);
+		this.emitter.main[this.emitter.type](this.emitterConfig, tree);
 	}
 	ceasefire() {
 		this.fire = new Function();
