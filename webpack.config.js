@@ -28,7 +28,7 @@ var config = {
     },
     output: {
         path: BUILD_PATH, //输出目录的配置，模板、样式、脚本、图片等资源的路径配置都相对于它
-        publicPath: '../', //模板、样式、脚本、图片等资源对应的server上的路径
+        publicPath: './', //模板、样式、脚本、图片等资源对应的server上的路径
         filename: 'js/[name].js' //每个页面对应的主js的生成配置
             // chunkFilename: 'js/[id].chunk.js' //chunk生成的配置
     },
@@ -74,7 +74,7 @@ for (var name in config.entry) {
             // favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
             title: name,
             chunks: [name], //需要引入的chunk，不配置就会引入所有页面的资源
-            filename: './app/' + name + '.html', //生成的html存放路径，相对于path
+            filename: './' + name + '.html', //生成的html存放路径，相对于path
             template: './src/template/' + name + '.html', //html模板路径
             inject: 'body', //js插入的位置，true/'head'/'body'/false
             hash: true, //为静态资源生成hash值

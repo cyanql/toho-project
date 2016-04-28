@@ -20,13 +20,13 @@ import './lib/Carousel.js';
 	}
 
 	addCarousel({
-		carouselID: 'carousel-wrap',
-		mainID: 'carousel-wrap-main',
+		carouselId: 'carousel-wrap',
+		mainId: 'carousel-wrap-main',
 		type: 'wrap'
 	});
 	addCarousel({
-		carouselID: 'carousel-fade',
-		mainID: 'carousel-fade-main',
+		carouselId: 'carousel-fade',
+		mainId: 'carousel-fade-main',
 		type: 'fade',
 		timeout: 5000
 	});

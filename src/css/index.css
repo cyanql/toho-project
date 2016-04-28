@@ -7,6 +7,7 @@ img{border:none;}
 .clear-fix:after {content:"";clear: both;}
 /************************top*********************/
 .header {
+	min-width: 1200px;
 	position: fixed;
 	left:0;
 	top:0;
@@ -233,15 +234,15 @@ img{border:none;}
 }
 
 /*****************carousel******************/
+
 #carousel,
 .carousel {
     position: relative;
+    overflow: hidden;
 }
 #carousel-main,
 .carousel-main {
     position: relative;
-    height: 600px;
-    overflow: hidden;
     background-color: #333;
 }
 #carousel-main > *,
@@ -250,12 +251,14 @@ img{border:none;}
     left:0;
     top:0;
     width:100%;
-    transition-duration:1s;
+    transition-duration: 1s;
     backface-visibility: hidden;
     display: block;
 }
-
-
+.carousel-main .carousel-content {
+    position: absolute;
+    z-index: 1000px;
+}
 
 /**************Tab********************/
 .tab-ctrl > * {
