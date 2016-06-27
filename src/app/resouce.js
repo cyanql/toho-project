@@ -1,7 +1,7 @@
-import ALL 			from '../images/all';
-import PLAYER 		from '../images/player';
-import EXPLOSION 	from '../images/explosion';
-import BG 			from '../images/bg';
+import ALL 			from 'assets/all'
+import PLAYER 		from 'assets/player'
+import EXPLOSION 	from 'assets/explosion'
+import BG 			from 'assets/bg'
 
 export default {
 	images: {
@@ -13,4 +13,4 @@ export default {
 	sounds: [
 
 	]
-};
+}

@@ -6,11 +6,11 @@
 ###游戏玩法
 * 当前：功能单一
   + 游戏模式：生存类
-    - 躲避`boss`子弹，并攻击`boss`累计得分直到角色`player`死亡
+    - 躲避`enemy`子弹，并攻击`enemy`累计得分直到角色`player`死亡
 
 * 预期：功能多样
   + 游戏模式：过关类
-    - 躲避`boss`子弹，并攻击`boss`闯关直到最后一关转为生存类，累计得分直到角色`player`死亡
+    - 躲避`enemy`子弹，并攻击`enemy`闯关直到最后一关转为生存类，累计得分直到角色`player`死亡
 
 
 ###游戏特色
@@ -42,9 +42,9 @@
   + 初始化以上SYS管理器
   + 在资源都已经加载好的情况下调用`Game.play`
 * `Game.play`
-  + 新建游戏需要的对象，如玩家，`boss`等
+  + 新建游戏需要的对象，如玩家，`enemy`等
   + 循环：
-    - 调用精灵对象如玩家和`boss`等的射击函数->创建各自的子弹到优化树中
+    - 调用精灵对象如玩家和`enemy`等的射击函数->创建各自的子弹到优化树中
     - 将精灵对象传入优化树检索->返回精灵对象所在区域的其他对象
     - 将返回的结果对象数组进行碰撞检测->符合条件的对象添加删除标记
     - 调用优化树刷新->将有删除标记的对象从树中删除，并返回树中所有的对象
@@ -195,16 +195,16 @@ start->play: 加载完成后调用play
 
 ```flow
 
-st=>start: 创建`boss`和`player`
+st=>start: 创建`enemy`和`player`
 op1=>operation: 绘制背景
-op2=>operation: 将`boss`插入优化树
+op2=>operation: 将`enemy`插入优化树
 op3=>operation: 帧率初始化
 op4=>operation: 调用循环函数
-op5=>operation: `boss`开火
+op5=>operation: `enemy`开火
 op6=>operation: `player`开火
 op7=>operation: 移动`player`到控制器坐标（目前为鼠标控制，后期添加键盘）
 op8=>operation: 优化树检索`player`周围的物体并返回对象数组
-co1=>condition: 遍历对象数组并判断其是否与`boss`和`player`发生碰撞
+co1=>condition: 遍历对象数组并判断其是否与`enemy`和`player`发生碰撞
 co2=>condition: 如果对象没删除或不是无敌
 co3=>condition: 若对象的拥有者不是`player`且与`player`发生碰撞
 coop1=>operation: 调用销毁函数（将removed标记置1）

@@ -12,10 +12,10 @@
 		"propulsiontype": "line",
 		"type": "circle"
 	}, {
-		"orignX": 64,
-		"orignY": 448,
-		"orignWidth": 64,
-		"orignHeight": 64,
+		"orignX": 103,
+		"orignY": 352,
+		"orignWidth": 16,
+		"orignHeight": 32,
 		"speed": 2,
 		"number": 15,
 		"limit": 5,
@@ -102,7 +102,7 @@
 		"orignWidth": 62,
 		"orignHeight": 63
 	}],
-	"Boss": [{
+	"Enemy": [{
 		"orignX": 0,
 		"orignY": 1712,
 		"orignWidth": 48,
