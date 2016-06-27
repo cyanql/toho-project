@@ -17,13 +17,13 @@
 
 `npm run dev`
 
-[localhost:3000/build/index.html](localhost:3000/build/index.html)
+[http://localhost:3000/build/index.html](http://localhost:3000/build/index.html)
 
 
 
 
 ## Screenshot
-![Screenshot](https://github.com/Keyves/Tosns/blob/master/assets/screenshot.png)
+![Screenshot](https://github.com/Keyves/toho-project/blob/master/assets/screenshot.png)
 
 
 
