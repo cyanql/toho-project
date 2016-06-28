@@ -2,10 +2,8 @@ import Sprite from './Sprite'
 
 export default
 class Bullet extends Sprite {
-	constructor(img, cx, cy, config) {
-		super(img, config)
-
-		super.move(cx, cy)
+	constructor(img, cx, cy, opts) {
+		super(img, cx, cy, opts)
 
 		Object.assign(this, {
 			angle: 0,
@@ -46,4 +44,8 @@ class Bullet extends Sprite {
 		//let distY = -Math.round(Math.log(distX))
 		this.motion(distX, distY)
 	}
+
+		/*const dxy = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
+		const dy = Math.sin(this.angle) * dxy
+		const dx = dy / Math.tan((Math.PI / 2 - this.angle) / 2)*/
 }

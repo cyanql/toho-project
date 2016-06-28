@@ -59,7 +59,7 @@ const Game = {
 	},
 	play() {
 		const { Collision, Render, Control, Resource, Dom } = SYS
-		
+
 		Dom.bgcanvas.getContext('2d').drawImage(Resource.images.bg, 0, 0, Dom.bgcanvas.width, Dom.bgcanvas.height)
 
 		const enemy = new Enemy(Resource.images.all, Render.renderWidth / 2, Render.renderHeight / 5, setting.Enemy[0])
@@ -70,7 +70,17 @@ const Game = {
 		const playerTree = new QuadTree(scope)
 		const enemyTree = new QuadTree(scope)
 
-		const img_all = Resource.images.explosion
+		let step = 1
+		enemy.onCeasefireInterval = function() {
+			this.move(this.cx + step, this.cy)
+			if (this.cx  < 10) {
+				step = 1
+			} else if (this.cx > Dom.canvas.width - 10) {
+				step = -1
+			}
+		}
+
+		const img_explosion = Resource.images.explosion
 
 		let enemyArr = []
 		let playerArr = []
@@ -79,17 +89,17 @@ const Game = {
 		const loop = () => {
 			this.RAF = window.requestAnimationFrame(loop)
 			enemy.fire(enemyTree)
-			player.fire(playerTree)
+			player.fire(playerTree, 'player')
 
 			player.move(Control.movePos.x, Control.movePos.y)
 
 			// 筛选物体集合并进行碰撞检测
 			enemyTree.retrieve(player).forEach(result => {
 				if (!result.removed && !result.undead && Collision.check.circle(player, result)) {
-					result.destroy(img_all, enemyTree)
-					player.hit()
+					result.destroy(img_explosion, enemyTree)
+					player.HP--
 					if (player.HP <= 0) {
-						player.destroy(img_all, enemyTree)
+						player.destroy(img_explosion, enemyTree)
 						player.ceasefire()
 						setTimeout(() => {
 							Dom.resetlayer.style.display = 'block'
@@ -102,11 +112,11 @@ const Game = {
 			// 筛选物体集合并进行碰撞检测
 			playerTree.retrieve(enemy).forEach(result => {
 				if (!result.removed && !result.undead && Collision.check.circle(enemy, result)) {
-					result.destroy(img_all, enemyTree)
-					enemy.hit()
+					result.destroy(img_explosion, enemyTree)
+					enemy.HP--
 					Dom.score.innerHTML = parseInt(Dom.score.innerHTML) + 100
 					if (enemy.HP <= 0) {
-						enemy.destroy(img_all, enemyTree)
+						enemy.destroy(img_explosion, enemyTree)
 						enemy.ceasefire()
 						setTimeout(() => {
 							Dom.resetlayer.style.display = 'block'

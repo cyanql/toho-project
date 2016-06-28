@@ -1,5 +1,5 @@
 import Sprite from './Sprite'
-import Emitter from './Emitter'
+import EmitterSprite from './EmitterSprite'
 import setting from '../setting'
 
 function rand(min, max) {
@@ -7,65 +7,20 @@ function rand(min, max) {
 }
 
 export default
-class Enemy extends Sprite {
+class EnemySprite extends EmitterSprite {
 
 	HP = 0
-	fireTimes = 0
-	fireSwitch = true
 
-	constructor(img, cx, cy, config) {
-		super(img, config)
-
-		const emitterConfig = setting.Emitter[2]
-
-		this.emitterConfig = emitterConfig
+	constructor(img, cx, cy, opts) {
+		super(img, cx, cy, opts)
 
 		super.remap(2.5)
 		super.resize(2)
-		super.move(cx, cy)
 
-		this.HP = config.HP
-		this.emitter = {
-			main: new Emitter(img, cx, cy),
-			speed: emitterConfig.speed,
-			num: emitterConfig.number,
-			limit: emitterConfig.limit,
-			spacing: emitterConfig.spacing,
-			timeout: emitterConfig.timeout,
-			type: emitterConfig.type,
-			dist: 0
+		this.HP = opts.HP
+		this.init(setting.Emitter[2])
+		this.onCeasefire = () => {
+			this.init(setting.Emitter[rand(1, setting.Emitter.length)])
 		}
-	}
-	setEmitter(emitterConfig) {
-		Object.assign(this.emitter, emitterConfig)
-	}
-	fire(tree) {
-		if (!this.fireSwitch)
-			return
-
-		if (this.emitter.dist < this.emitter.spacing) {			//当间距达到了限定值才允许射击
-			return this.emitter.dist += this.emitter.speed
-		} else {
-			this.emitter.dist = 0
-		}
-
-		if (this.fireTimes > this.emitter.limit) {		//当开火次数到一轮攻击的上限，关闭开火阀门，两秒后打开
-			this.emitterConfig = setting.Emitter[rand(1, setting.Emitter.length)]	//type[0]
-			this.setEmitter(this.emitterConfig)
-			this.fireTimes = 0
-			this.fireSwitch = false
-			return setTimeout(() => {
-				this.fireSwitch = true
-			},this.emitter.timeout)
-		} else {
-			this.fireTimes++
-		}
-		this.emitter.main[this.emitter.type](this.emitterConfig, tree)
-	}
-	ceasefire() {
-		this.fire = new Function()
-	}
-	hit() {
-		this.HP--
 	}
 }

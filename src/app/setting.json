@@ -1,21 +1,25 @@
 {
 	"Emitter": [{
-		"orignX": 36,
-		"orignY": 64,
-		"orignWidth": 6,
-		"orignHeight": 14,
-		"speed": 20,
-		"number": 15,
-		"limit": 5,
-		"spacing": 100,
-		"timeout": 500,
+		"bulletOpts": {
+			"orignX": 36,
+			"orignY": 64,
+			"orignWidth": 6,
+			"orignHeight": 14
+		},
+		"speed": -20,
+		"number": 1,
+		"limit": 1,
+		"spacing": -100,
+		"timeout": 1,
 		"propulsiontype": "line",
 		"type": "circle"
 	}, {
-		"orignX": 103,
-		"orignY": 352,
-		"orignWidth": 16,
-		"orignHeight": 32,
+		"bulletOpts": {
+			"orignX": 103,
+			"orignY": 352,
+			"orignWidth": 16,
+			"orignHeight": 32
+		},
 		"speed": 2,
 		"number": 15,
 		"limit": 5,
@@ -24,10 +28,12 @@
 		"propulsiontype": "circle",
 		"type": "circle"
 	}, {
-		"orignX": 32,
-		"orignY": 32,
-		"orignWidth": 16,
-		"orignHeight": 16,
+		"bulletOpts": {
+			"orignX": 32,
+			"orignY": 32,
+			"orignWidth": 16,
+			"orignHeight": 16
+		},
 		"speed": 5,
 		"number": 15,
 		"limit": 5,
@@ -36,10 +42,12 @@
 		"propulsiontype": "circle",
 		"type": "circle"
 	}, {
-		"orignX": 128,
-		"orignY": 208,
-		"orignWidth": 32,
-		"orignHeight": 32,
+		"bulletOpts": {
+			"orignX": 128,
+			"orignY": 208,
+			"orignWidth": 32,
+			"orignHeight": 32
+		},
 		"speed": 10,
 		"number": 25,
 		"limit": 5,
@@ -48,10 +56,12 @@
 		"propulsiontype": "test",
 		"type": "circle"
 	}, {
-		"orignX": 192,
-		"orignY": 256,
-		"orignWidth": 32,
-		"orignHeight": 32,
+		"bulletOpts": {
+			"orignX": 192,
+			"orignY": 256,
+			"orignWidth": 32,
+			"orignHeight": 32
+		},
 		"speed": 10,
 		"number": 9,
 		"limit": 5,
@@ -60,10 +70,12 @@
 		"propulsiontype": "test",
 		"type": "circle"
 	}, {
-		"orignX": 64,
-		"orignY": 448,
-		"orignWidth": 64,
-		"orignHeight": 64,
+		"bulletOpts": {
+			"orignX": 64,
+			"orignY": 448,
+			"orignWidth": 64,
+			"orignHeight": 64
+		},
 		"speed": 10,
 		"number": 6,
 		"limit": 5,
@@ -72,10 +84,12 @@
 		"propulsiontype": "test",
 		"type": "circle"
 	}, {
-		"orignX": 32,
-		"orignY": 32,
-		"orignWidth": 16,
-		"orignHeight": 16,
+		"bulletOpts": {
+			"orignX": 32,
+			"orignY": 32,
+			"orignWidth": 16,
+			"orignHeight": 16
+		},
 		"speed": 10,
 		"number": 15,
 		"limit": 5,
@@ -84,10 +98,12 @@
 		"propulsiontype": "test",
 		"type": "circle"
 	}, {
-		"orignX": 32,
-		"orignY": 32,
-		"orignWidth": 16,
-		"orignHeight": 16,
+		"bulletOpts": {
+			"orignX": 32,
+			"orignY": 32,
+			"orignWidth": 16,
+			"orignHeight": 16
+		},
 		"speed": 10,
 		"number": 15,
 		"limit": 5,
@@ -100,14 +116,14 @@
 		"orignX": 0,
 		"orignY": 0,
 		"orignWidth": 62,
-		"orignHeight": 63
+		"orignHeight": 62
 	}],
 	"Enemy": [{
 		"orignX": 0,
 		"orignY": 1712,
 		"orignWidth": 48,
 		"orignHeight": 48,
-		"HP": 10
+		"HP": 100
 	}],
 	"Player": [{
 		"orignX": 0,
