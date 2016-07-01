@@ -11,6 +11,9 @@
 [**Play 试玩**](https://keyves.github.io/toho-project)
 
 
+### 玩法
+
+通过鼠标控制角色移动，自动射击，boss血量300（即击中300下），玩家血量10
 
 
 ### 调试

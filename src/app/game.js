@@ -38,23 +38,24 @@ const SYS = {
 const Game = {
 	RAF: null,
 	start() {
+		const { Render, Control, Resource, Dom, Loader } = SYS
 
-		SYS.Dom.canvas.width = document.documentElement.clientWidth
-		SYS.Dom.canvas.height = document.documentElement.clientHeight
-		SYS.Dom.canvas.backgroundAlpha = 0
-		SYS.Dom.bgcanvas.width = document.documentElement.clientWidth
-		SYS.Dom.bgcanvas.height = document.documentElement.clientHeight
+		Dom.canvas.width = document.documentElement.clientWidth
+		Dom.canvas.height = document.documentElement.clientHeight
+		Dom.canvas.backgroundAlpha = 0
+		Dom.bgcanvas.width = document.documentElement.clientWidth
+		Dom.bgcanvas.height = document.documentElement.clientHeight
 
-		SYS.Render.init(SYS.Dom.canvas)
-		SYS.Control.init(document)
-		SYS.Loader.init(SYS.Dom.loadlayer)
+		Render.init(Dom.canvas)
+		Control.init(document)
+		Loader.init(Dom.loadlayer)
 
-		SYS.Resource.images.all = SYS.Loader.loadImage(resource.images.ALL)
-		SYS.Resource.images.player = SYS.Loader.loadImage(resource.images.PLAYER)
-		SYS.Resource.images.explosion = SYS.Loader.loadImage(resource.images.EXPLOSION)
-		SYS.Resource.images.bg = SYS.Loader.loadImage(resource.images.BG)
+		Resource.images.all = Loader.loadImage(resource.images.ALL)
+		Resource.images.player = Loader.loadImage(resource.images.PLAYER)
+		Resource.images.explosion = Loader.loadImage(resource.images.EXPLOSION)
+		Resource.images.bg = Loader.loadImage(resource.images.BG)
 
-		SYS.Loader.onload = () => this.play()
+		Loader.onload = () => this.play()
 
 	},
 	play() {

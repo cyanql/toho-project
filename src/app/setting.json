@@ -10,7 +10,7 @@
 		"number": 1,
 		"limit": 1,
 		"spacing": -100,
-		"timeout": 1,
+		"timeout": 100,
 		"propulsiontype": "line",
 		"type": "circle"
 	}, {
@@ -21,9 +21,9 @@
 			"orignHeight": 32
 		},
 		"speed": 2,
-		"number": 15,
-		"limit": 5,
-		"spacing": 50,
+		"number": 20,
+		"limit": 10,
+		"spacing": 30,
 		"timeout": 500,
 		"propulsiontype": "circle",
 		"type": "circle"
@@ -35,11 +35,11 @@
 			"orignHeight": 16
 		},
 		"speed": 5,
-		"number": 15,
-		"limit": 5,
-		"spacing": 50,
+		"number": 20,
+		"limit": 10,
+		"spacing": 30,
 		"timeout": 1500,
-		"propulsiontype": "circle",
+		"propulsiontype": "crosspow",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
@@ -48,9 +48,9 @@
 			"orignWidth": 32,
 			"orignHeight": 32
 		},
-		"speed": 10,
+		"speed": 15,
 		"number": 25,
-		"limit": 5,
+		"limit": 10,
 		"spacing": 50,
 		"timeout": 1500,
 		"propulsiontype": "test",
@@ -62,12 +62,12 @@
 			"orignWidth": 32,
 			"orignHeight": 32
 		},
-		"speed": 10,
-		"number": 9,
-		"limit": 5,
+		"speed": 15,
+		"number": 15,
+		"limit": 10,
 		"spacing": 50,
 		"timeout": 1500,
-		"propulsiontype": "test",
+		"propulsiontype": "crosspow",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
@@ -76,12 +76,26 @@
 			"orignWidth": 64,
 			"orignHeight": 64
 		},
-		"speed": 10,
-		"number": 6,
-		"limit": 5,
+		"speed": 15,
+		"number": 10,
+		"limit": 8,
+		"spacing": 30,
+		"timeout": 1500,
+		"propulsiontype": "crosspow",
+		"type": "circle"
+	}, {
+		"bulletOpts": {
+			"orignX": 32,
+			"orignY": 32,
+			"orignWidth": 16,
+			"orignHeight": 16
+		},
+		"speed": 15,
+		"number": 30,
+		"limit": 10,
 		"spacing": 50,
 		"timeout": 1500,
-		"propulsiontype": "test",
+		"propulsiontype": "circle",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
@@ -91,22 +105,8 @@
 			"orignHeight": 16
 		},
 		"speed": 10,
-		"number": 15,
-		"limit": 5,
-		"spacing": 50,
-		"timeout": 1500,
-		"propulsiontype": "test",
-		"type": "circle"
-	}, {
-		"bulletOpts": {
-			"orignX": 32,
-			"orignY": 32,
-			"orignWidth": 16,
-			"orignHeight": 16
-		},
-		"speed": 10,
-		"number": 15,
-		"limit": 5,
+		"number": 20,
+		"limit": 10,
 		"spacing": 50,
 		"timeout": 1500,
 		"propulsiontype": "test",
@@ -123,13 +123,13 @@
 		"orignY": 1712,
 		"orignWidth": 48,
 		"orignHeight": 48,
-		"HP": 100
+		"HP": 300
 	}],
 	"Player": [{
 		"orignX": 0,
 		"orignY": 294,
 		"orignWidth": 90,
 		"orignHeight": 90,
-		"HP": 5
+		"HP": 10
 	}]
 }

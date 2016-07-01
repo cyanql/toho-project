@@ -19,33 +19,34 @@ class Bullet extends Sprite {
 	go() {
 		this[this.propulsiontype](this.angle, this.dist)
 	}
-	motion(distX, distY) {
+	_motion(distX, distY) {
 		this.cx += distX
 		this.cy += distY
 		this.x += distX
 		this.y += distY
 	}
-	gravity() {
+	_gravity() {
 		this.cy += 5
 		this.y += 5
 	}
 	line (distX, distY) {
-		this.motion(distX, distY)
+		this._motion(distX, distY)
 	}
 	circle(angle, dist) {
-		let distX = Math.round(Math.sin(angle) * dist)
-		let distY = Math.round(Math.cos(angle) * dist)
-		//this.gravity()
-		this.motion(distX, distY)
+		let dx = Math.round(Math.sin(angle) * dist)
+		let dy = Math.round(Math.cos(angle) * dist)
+		//this._gravity()
+		this._motion(dx, dy)
+	}
+	crosspow(angle, dist) {
+		let dx = Math.round(Math.sin(angle) * dist)
+		let dy = Math.round(Math.pow(Math.sqrt(dist), 1.5))
+		this._motion(dx, dy)
 	}
 	test(angle, dist) {
-		let distX = Math.round(Math.sin(angle) * dist)
-		let distY = Math.round(Math.sqrt(dist))
-		//let distY = -Math.round(Math.log(distX))
-		this.motion(distX, distY)
+		let cx = this.cx + Math.round(Math.sin(angle) * dist)
+		let cy = Math.round(Math.pow(this.cy + 1, 1.002))
+		this.move(cx, cy)
 	}
 
-		/*const dxy = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
-		const dy = Math.sin(this.angle) * dxy
-		const dx = dy / Math.tan((Math.PI / 2 - this.angle) / 2)*/
 }
