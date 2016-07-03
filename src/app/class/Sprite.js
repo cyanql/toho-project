@@ -24,11 +24,11 @@ class Sprite extends Rect {
 	}
 
 	draw(ctx) {
-		const angleAlpha = Math.atan(this.y / this.x)
-		const dist = this.y / Math.sin(angleAlpha)
+		const angleAlpha = Math.atan(this.cy / this.cx)
+		const dist = this.cy / Math.sin(angleAlpha)
 		const y2 = dist * Math.sin(this.angle + angleAlpha)
-		const dy = y2 - this.y
-		const dx = y2 / Math.tan(this.angle + angleAlpha) - this.x
+		const dy = y2 - this.cy
+		const dx = y2 / Math.tan(this.angle + angleAlpha) - this.cx
 
 		ctx.save()
 		ctx.rotate(-this.angle)

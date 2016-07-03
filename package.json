@@ -1,6 +1,6 @@
 {
 	"name": "toho-project",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "弹幕射击游戏",
 	"main": "./src/app/index.js",
 	"scripts": {

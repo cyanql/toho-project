@@ -3,6 +3,9 @@ import setting from '../setting'
 
 export default
 class PlayerSprite extends EmitterSprite {
+
+	HP = 0
+
 	constructor(img, cx, cy, opts) {
 		super(img, cx, cy, opts)
 		super.resize(0.1)

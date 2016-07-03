@@ -1,10 +1,10 @@
 {
 	"Emitter": [{
 		"bulletOpts": {
-			"orignX": 36,
-			"orignY": 64,
-			"orignWidth": 6,
-			"orignHeight": 14
+			"orignX": 85,
+			"orignY": 250,
+			"orignWidth": 12,
+			"orignHeight": 24
 		},
 		"speed": -20,
 		"number": 1,
@@ -15,100 +15,114 @@
 		"type": "circle"
 	}, {
 		"bulletOpts": {
-			"orignX": 103,
-			"orignY": 352,
-			"orignWidth": 16,
-			"orignHeight": 32
+			"orignX": 3,
+			"orignY": 250,
+			"orignWidth": 18,
+			"orignHeight": 23
 		},
-		"speed": 2,
-		"number": 20,
+		"speed": 3,
+		"number": 50,
 		"limit": 10,
-		"spacing": 30,
+		"spacing": 15,
 		"timeout": 500,
 		"propulsiontype": "circle",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
-			"orignX": 32,
-			"orignY": 32,
-			"orignWidth": 16,
-			"orignHeight": 16
+			"orignX": 26,
+			"orignY": 250,
+			"orignWidth": 22,
+			"orignHeight": 22
 		},
 		"speed": 5,
-		"number": 20,
+		"number": 30,
 		"limit": 10,
 		"spacing": 30,
-		"timeout": 1500,
+		"timeout": 1000,
 		"propulsiontype": "crosspow",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
-			"orignX": 128,
-			"orignY": 208,
-			"orignWidth": 32,
-			"orignHeight": 32
+			"orignX": 50,
+			"orignY": 250,
+			"orignWidth": 25,
+			"orignHeight": 25
+		},
+		"speed": 15,
+		"number": 35,
+		"limit": 10,
+		"spacing": 50,
+		"timeout": 1000,
+		"propulsiontype": "test",
+		"type": "circle"
+	}, {
+		"bulletOpts": {
+			"orignX": 85,
+			"orignY": 250,
+			"orignWidth": 12,
+			"orignHeight": 24
+		},
+		"speed": 1,
+		"number": 35,
+		"limit": 10,
+		"spacing": 10,
+		"timeout": 500,
+		"propulsiontype": "circle",
+		"type": "circle"
+	}, {
+		"bulletOpts": {
+			"orignX": 110,
+			"orignY": 250,
+			"orignWidth": 10,
+			"orignHeight": 20
 		},
 		"speed": 15,
 		"number": 25,
 		"limit": 10,
 		"spacing": 50,
-		"timeout": 1500,
-		"propulsiontype": "test",
-		"type": "circle"
-	}, {
-		"bulletOpts": {
-			"orignX": 192,
-			"orignY": 256,
-			"orignWidth": 32,
-			"orignHeight": 32
-		},
-		"speed": 15,
-		"number": 15,
-		"limit": 10,
-		"spacing": 50,
-		"timeout": 1500,
+		"timeout": 1000,
 		"propulsiontype": "crosspow",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
-			"orignX": 64,
-			"orignY": 448,
-			"orignWidth": 64,
-			"orignHeight": 64
+			"orignX": 6,
+			"orignY": 280,
+			"orignWidth": 10,
+			"orignHeight": 22
 		},
-		"speed": 15,
-		"number": 10,
+		"speed": 10,
+		"number": 30,
 		"limit": 8,
 		"spacing": 30,
-		"timeout": 1500,
+		"timeout": 1000,
 		"propulsiontype": "crosspow",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
 			"orignX": 32,
-			"orignY": 32,
-			"orignWidth": 16,
-			"orignHeight": 16
+			"orignY": 280,
+			"orignWidth": 10,
+			"orignHeight": 22
 		},
 		"speed": 15,
 		"number": 30,
 		"limit": 10,
 		"spacing": 50,
-		"timeout": 1500,
+		"timeout": 500,
 		"propulsiontype": "circle",
 		"type": "circle"
 	}, {
 		"bulletOpts": {
-			"orignX": 32,
-			"orignY": 32,
-			"orignWidth": 16,
-			"orignHeight": 16
+			"orignX": 54,
+			"orignY": 280,
+			"orignWidth": 20,
+			"orignHeight": 22
 		},
 		"speed": 10,
-		"number": 20,
+		"number": 30,
 		"limit": 10,
 		"spacing": 50,
-		"timeout": 1500,
+		"timeout": 1000,
 		"propulsiontype": "test",
 		"type": "circle"
 	}],
@@ -119,17 +133,90 @@
 		"orignHeight": 62
 	}],
 	"Enemy": [{
+		"orignX": 150,
+		"orignY": 0,
+		"orignWidth": 150,
+		"orignHeight": 250,
+		"HP": 50
+	}, {
+		"orignX": 300,
+		"orignY": 0,
+		"orignWidth": 150,
+		"orignHeight": 250,
+		"HP": 150
+	}, {
 		"orignX": 0,
-		"orignY": 1712,
-		"orignWidth": 48,
-		"orignHeight": 48,
+		"orignY": 0,
+		"orignWidth": 150,
+		"orignHeight": 250,
 		"HP": 300
 	}],
 	"Player": [{
-		"orignX": 0,
-		"orignY": 294,
-		"orignWidth": 90,
-		"orignHeight": 90,
+		"orignX": 410,
+		"orignY": 250,
+		"orignWidth": 30,
+		"orignHeight": 55,
 		"HP": 10
+	}],
+	"Magic": [{
+		"orignX": 0,
+		"orignY": 310,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 150,
+		"orignY": 310,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 300,
+		"orignY": 310,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 0,
+		"orignY": 460,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 150,
+		"orignY": 460,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 300,
+		"orignY": 460,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 0,
+		"orignY": 610,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 150,
+		"orignY": 610,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 300,
+		"orignY": 610,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 0,
+		"orignY": 760,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 150,
+		"orignY": 760,
+		"orignWidth": 150,
+		"orignHeight": 150
+	}, {
+		"orignX": 300,
+		"orignY": 760,
+		"orignWidth": 150,
+		"orignHeight": 150
 	}]
 }

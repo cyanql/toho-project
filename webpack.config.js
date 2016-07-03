@@ -31,7 +31,7 @@ const config = {
 			css: 'src/css',
 			assets: 'assets'
 		},
-		extensions: ['', '.js', '.css', '.png', '.jpg', '.json']
+		extensions: ['', '.js', '.css', '.jpg', '.png', '.json', '.webp']
 	},
 	module: {
 		loaders: [{
@@ -47,7 +47,7 @@ const config = {
 			test: /\.html$/,
 			loader: "html?attrs=img:src img:data-src"
 		}, {
-			test: /\.(jpg|png)$/,
+			test: /\.(jpg|png|webp)$/,
 			loader: 'url?name=images/[name].[ext]&limit=10'
 		}, {
 			test: /\.json$/,
