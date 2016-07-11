@@ -16,7 +16,7 @@ const config = {
 	},
 	entry: {
 		index: ['./src/app/index'],
-		game: ['./src/app/game']
+		home: ['./src/app/home']
 	},
 	output: {
 		path: BUILD_PATH, //输出到本地目录的配置，模板、样式、脚本、图片等资源的路径都相对于它
@@ -39,8 +39,8 @@ const config = {
 			include: APP_PATH,
 			loader: 'babel'
 		}, {
-			test: /\.css$/,
-			loader: ExtractTextPlugin.extract('style', 'css')
+			test: /\.(css|less)$/,
+			loader: ExtractTextPlugin.extract('style', 'css!less')
 		}, {
 			//html模板加载器，可以处理引用的静态资源，默认配置参数attrs=img:src，处理图片的src引用的资源
 			//比如你配置，attrs=img:src img:data-src就可以一并处理data-src引用的资源了，就像下面这样

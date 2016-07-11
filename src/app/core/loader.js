@@ -1,12 +1,13 @@
 export default
 class Loader {
-	layer = null
+	el = null
 	loaded = true
 	loadedCount = 0
 	totalCount = 0
 	soundFileExtn = '.ogg'
+	progress = 0
 
-	init(layer) {
+	init(el) {
 		let mp3Support, oggSupport
 		const audio = document.createElement('audio')
 		if (audio.canPlayType) {
@@ -17,27 +18,23 @@ class Loader {
 			oggSupport = false
 		}
 		this.soundFileExtn = oggSupport ? '.ogg' : mp3Support ? '.mp3' : undefined
-		this.layer = layer
+		this.el = el
 	}
 
-	onload() {}
+	onLoadAll() {}
 
 	itemLoaded() {
 		this.loadedCount++
+		this.el.innerHTML = `(${this.loadedCount}/${this.totalCount})`
 		if (this.loadedCount === this.totalCount) {
 			this.loaded = true
-			this.layer.style.display = 'none'
-			if (this.onload) {
-				this.onload()
-				this.onload = undefined
-			}
+			this.onLoadAll()
 		}
 	}
 
 	loadImage(url) {
 		this.totalCount++
 		this.loaded = false
-		this.layer.style.display = 'block'
 
 		const img = new Image()
 		img.src = url
@@ -48,7 +45,7 @@ class Loader {
 	loadSound(url) {
 		this.totalCount++
 		this.loaded = false
-		this.layer.style.display = 'block'
+		this.el.style.display = 'block'
 		const audio = new Audio()
 		audio.src = url + this.soundFileExtn
 		audio.addEventListener('canplaythrough', this.itemLoaded, false)
