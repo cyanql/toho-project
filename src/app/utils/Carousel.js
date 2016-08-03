@@ -1,13 +1,28 @@
 /*******/
 !(function() {
+
+	function hasClass(elem, className) {
+		return elem.className.indexOf(className) > -1;
+	}
+
+	function addClass(elem, className) {
+		if (!hasClass(elem, className)) {
+			elem.className = elem.className.split(' ').concat(className).join(' ');
+		}
+	}
+
+	function removeClass(elem, className) {
+		elem.className = elem.className.replace(new RegExp('\\b' + className + '\\b'), '');
+	}
+
 	function addCarousel(custom) {
 		var temp = new Carousel(custom);
 		temp.init();
-		temp.resize();
 		temp.create();
 		temp.start();
 		return temp;
 	}
+
 	function Carousel(custom) {
 		if (!custom) return alert('请填写目标元素id和按钮容器id');
 
@@ -33,66 +48,24 @@
 				this[item] = options[item];
 			}
 		},
-		hasClass: function(elem, className) {
-			return elem.className.match(new RegExp('\\b' + className + '\\b'));
-		},
-		addClass: function(elem, className) {
-			if (!this.hasClass(elem, className)) {
-				elem.className = elem.className.split(' ').concat(className).join(' ');
-			}
-		},
-		removeClass: function(elem, className) {
-			elem.className = elem.className.replace(new RegExp('\\b' + className + '\\b'), '');
-		},
 		init: function () {
-			var _this = this;
 			//获取组件元素、图片容器元素、图片元素
 			this.carousel = document.getElementById(this.carouselId);
 			this.main = document.getElementById(this.mainId);
-			this.main.img = this.main.getElementsByTagName('img');
-
-			this.carouselStyle = this.carousel.style;
-			this.mainStyle = this.main.style;
-
-			this.items = this.main.children;
-			this.total = this.main.children.length;
 
 			this.prevIndex = 0;
 			this.currIndex = 0;
 
 			this.interval = null;
 
-			this.addClass(this.carousel, 'carousel');
-			this.addClass(this.main, 'carousel-main');
+			addClass(this.carousel, 'carousel');
+			addClass(this.main, 'carousel-main');
 
-		},
-		loaded: function() {
-
-		},
-		resize: function() {
-			var _this = this;
-			var firstImg = this.main.img[0];
-
-			if (this.width) {
-				Array.prototype.forEach.call(this.main.img, function(v) {
-					v.width = _this.width;
-					v.onload = function() {
-						this.width = _this.width;
-					};
-				});
-
-				this.carouselStyle.width = this.width + 'px';
-			} else {
-				this.carouselStyle.width = firstImg.width + 'px';
-			}
-
-			this.mainStyle.height = this.carouselStyle.height = firstImg.height + 'px';
-			firstImg.onload = function() {
-				_this.mainStyle.height = _this.carouselStyle.height = this.height + 'px';
-			};
 		},
 		create: function() {
 			var _this = this;
+			var items = this.main.children
+			var total = items.length;
 
 			switch (this.type) {
 				case 'fade':
@@ -103,13 +76,13 @@
 					this.main.children[0].style.opacity = '1';
 					break;
 				case 'wrap':
-					var first = this.items[0].cloneNode(true);
-					var last = this.items[this.total - 1].cloneNode(true);
+					var first = items[0].cloneNode(true);
+					var last = items[total - 1].cloneNode(true);
 
-					this.main.insertBefore(last, this.items[0]);
+					this.main.insertBefore(last, items[0]);
 					this.main.appendChild(first);
 
-					Array.prototype.map.call(_this.main.children, function(v, i) {
+					Array.prototype.map.call(this.main.children, function(v, i) {
 						v.style.left = _this.main.offsetWidth * (i - 1) + 'px';
 						return v;
 					});
@@ -150,7 +123,7 @@
 				_this.start();
 				_this.next();
 			};
-			
+
 			this.carousel.appendChild(prev);
 			this.carousel.appendChild(next);
 
@@ -181,7 +154,7 @@
 			nav.style.zIndex = '10';
 
 			//设置各自的按钮编号，用以跳转该图片
-			for (i = 0, len = this.total; i < len; ++i) {
+			for (i = 0, len = total; i < len; ++i) {
 				marker = createMarker();
 				marker.onclick = function (idx) {
 					return function() {
@@ -195,7 +168,7 @@
 
 			this.carousel.appendChild(nav);
 
-			this.markerNumber = nav.children;
+			this.markerElement = nav.children;
 			this.mark();
 		},
 		start: function () {
@@ -205,8 +178,8 @@
 			}, this.timeout);
 		},
 		mark: function () {
-			this.markerNumber[this.prevIndex].style.backgroundColor = this.markerNormalColor;
-			this.markerNumber[this.currIndex].style.backgroundColor = this.markerActiveColor;
+			this.markerElement[this.prevIndex].style.backgroundColor = this.markerNormalColor;
+			this.markerElement[this.currIndex].style.backgroundColor = this.markerActiveColor;
 		},
 		skip: function (index) {	//跳转函数
 			this.currIndex = index;
@@ -221,42 +194,54 @@
 			this.loop();
 		},
 		loop: function () {		//判断是否到达队尾或队首，根据情况直接跳转（去掉动画过程做到无缝连接）
-			switch (this.type) {
-				case 'wrap':
-					this.mainStyle.transform = 'translate3d(' + (- this.currIndex * this.main.offsetWidth) + 'px, 0, 0)';
-					this.mainStyle.transitionDuration = '1s';
+			var items = this.main.children;
+			var total = items.length - 2;
+			var main = this.main;
+			var mainStyle = main.style;
 
-					if (this.currIndex === this.total) {
-						this.mainStyle.transform = 'translate3d(' + this.main.offsetWidth + 'px, 0, 0)';
-						this.mainStyle.transitionDuration = '0s';
-						this.mainStyle.transform = 'translate3d(' + this.main.offsetWidth * 0 + 'px, 0, 0)';
-						this.mainStyle.transitionDuration = '1s';
-					} else if (this.currIndex === -1) {
-						this.mainStyle.transform = 'translate3d(' + (- this.total) * this.main.offsetWidth + 'px, 0, 0)';
-						this.mainStyle.transitionDuration = '0s';
-						this.mainStyle.transform = 'translate3d(' + (- this.total + 1) * this.main.offsetWidth + 'px, 0, 0)';
-						this.mainStyle.transitionDuration = '1s';
-					}
+			this.loop = function() {
+				switch (this.type) {
+					case 'wrap':
+						mainStyle.transform = 'translate3d(' + (- this.currIndex * main.offsetWidth) + 'px, 0, 0)';
+						mainStyle.transitionDuration = '1s';
 
-					this.currIndex = this.currIndex < 0 ? this.total - 1 : this.currIndex % this.total;
-					this.mark();
-					this.prevIndex = this.currIndex;
-					break;
+						if (this.currIndex === total) {
+							mainStyle.transform = 'translate3d(' + main.offsetWidth + 'px, 0, 0)';
+							mainStyle.transitionDuration = '0s';
+							mainStyle.transform = 'translate3d(' + main.offsetWidth * 0 + 'px, 0, 0)';
+							mainStyle.transitionDuration = '1s';
+						} else if (this.currIndex === -1) {
+							mainStyle.transform = 'translate3d(' + (- total) * main.offsetWidth + 'px, 0, 0)';
+							mainStyle.transitionDuration = '0s';
+							mainStyle.transform = 'translate3d(' + (- total + 1) * main.offsetWidth + 'px, 0, 0)';
+							mainStyle.transitionDuration = '1s';
+						}
 
-				case 'fade':
-					this.currIndex = this.currIndex < 0 ? this.total - 1 : this.currIndex % this.total;
+						this.currIndex = this.currIndex < 0 ? total - 1 : this.currIndex % total;
+						this.mark();
+						this.prevIndex = this.currIndex;
+						break;
 
-					this.items[this.prevIndex].style.opacity = '0';
-					this.items[this.currIndex].style.opacity = '1';
+					case 'fade':
+						this.currIndex = this.currIndex < 0 ? total - 1 : this.currIndex % total;
 
-					this.mark();
-					this.prevIndex = this.currIndex;
-					break;
+						items[this.prevIndex].style.opacity = '0';
+						items[this.currIndex].style.opacity = '1';
+
+						this.mark();
+						this.prevIndex = this.currIndex;
+						break;
+				}
+				this.mark();
 			}
-			this.mark();
 		}
 	};
 
 	window.addCarousel = addCarousel;
+	try {
+		module.exports = addCarousel
+	} catch(err) {
+		console.error(err)
+	}
 	return addCarousel;
 })();

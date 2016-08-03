@@ -1,5 +1,5 @@
 import 'css/home.css'
-import 'app/utils/Carousel.js'
+import addCarousel from 'app/utils/Carousel'
 
 {
 	{
@@ -18,17 +18,20 @@ import 'app/utils/Carousel.js'
 			}
 		})
 	}
-
-	addCarousel({
-		carouselId: 'carousel-wrap',
-		mainId: 'carousel-wrap-main',
-		type: 'wrap'
+	Array.prototype.forEach.call(document.getElementById('carousel-fade-main').children, (el) => {
+		el.style.backgroundColor = `#${parseInt(4095 * Math.random()).toString(16)}`
 	})
+	//
+	// addCarousel({
+	// 	carouselId: 'carousel-wrap',
+	// 	mainId: 'carousel-wrap-main',
+	// 	type: 'wrap'
+	// })
 
 	addCarousel({
 		carouselId: 'carousel-fade',
 		mainId: 'carousel-fade-main',
-		type: 'fade',
-		timeout: 5000
+		type: 'wrap',
+		timeout: 1000
 	})
 }
