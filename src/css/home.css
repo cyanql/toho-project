@@ -81,13 +81,12 @@ img{border:none;}
 
 /*--------------------------*/
 .container-banner {
-	width:1200px;
+	width: 1200px;
 	margin: 0 auto;
 }
 /*--------------------------*/
 .container-game {
 	margin: 0 auto;
-	margin-top: -4px;
 	background-color: #333;
 	width:1200px;
 	overflow: hidden;
@@ -240,24 +239,25 @@ img{border:none;}
     position: relative;
     overflow: hidden;
 }
-#carousel-main,
-.carousel-main {
+#carousel-container,
+.carousel-container {
     position: relative;
+	width: 1200px;
+	height: 800px;
     background-color: #333;
 }
-#carousel-main > *,
-.carousel-main > * {
+#carousel-container > *,
+.carousel-container > * {
     position: absolute;
-    left:0;
-    top:0;
+    left: 0;
+    top: 0;
     width:100%;
-    transition-duration: 1s;
+	height: 100%;
     backface-visibility: hidden;
     display: block;
-}
-.carousel-main .carousel-content {
-    position: absolute;
-    z-index: 1000px;
+	text-align: center;
+	font-size: 35px;
+	color: white;
 }
 
 /**************Tab********************/
@@ -288,7 +288,7 @@ img{border:none;}
 	padding:10px 40px;
 	font-size:14px;
 	float:left;
-	width:520px;
+	width:1200px;
 }
 .tab-slider-container .tab-slider-item > * {
 	line-height: 35px;

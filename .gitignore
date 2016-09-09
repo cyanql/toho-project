@@ -1,6 +1,7 @@
 #folder
 noused
 magic
+node_modules
 
 #document
 *.bat

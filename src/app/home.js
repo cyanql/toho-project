@@ -1,5 +1,5 @@
 import 'css/home.css'
-import 'app/utils/Carousel.js'
+import addCarousel from 'app/utils/Carousel.js'
 
 {
 	{
@@ -11,7 +11,7 @@ import 'app/utils/Carousel.js'
 
 
 		Array.prototype.forEach.call(ctrlItems, (v, i) => {
-			v.onmouseover = function () {
+			v.onmouseover = function() {
 				ctrl.querySelector('.tab-selected').className = ''
 				this.className += 'tab-selected'
 				sliderContainer.style.marginLeft = -sliderItemWidth * i + 'px'
@@ -20,15 +20,20 @@ import 'app/utils/Carousel.js'
 	}
 
 	addCarousel({
-		carouselId: 'carousel-wrap',
-		mainId: 'carousel-wrap-main',
-		type: 'wrap'
+		selector: {
+			carouselId: 'carousel-fade',
+			containerId: 'carousel-fade-container'
+		},
+		type: 'wrap',
+		timeout: '50000'
 	})
 
-	addCarousel({
-		carouselId: 'carousel-fade',
-		mainId: 'carousel-fade-main',
-		type: 'fade',
-		timeout: 5000
-	})
+	// addCarousel({
+	// 	selector: {
+	// 		carouselId: 'carousel-wrap',
+	// 		containerId: 'carousel-wrap-container'
+	// 	},
+	// 	type: 'fade',
+	// 	timeout: 5000
+	// })
 }
